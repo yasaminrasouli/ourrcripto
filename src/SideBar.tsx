@@ -7,8 +7,15 @@ import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 import SideBarOption from "./SideBarOption";
-import { createUseStyles, Styles } from "react-jss";
+import { createUseStyles } from "react-jss";
+
+// Define the interface for your component props
+interface SideBarProps {
+  isOpenMenu: boolean;
+  onClose: () => void; // Prop to handle close
+}
 
 const options = [
   { title: "Dashboard", Icon: HomeOutlinedIcon, selected: true },
@@ -33,16 +40,30 @@ const useStyles = createUseStyles({
     maxWidth: "252px",
     justifyContent: "center",
     padding: "24px 0",
+    position: "fixed",
+    top: "0",
+    left: "0",
+    height: "100%",
+    transition: "transform 0.3s ease",
+    transform: (props: SideBarProps) =>
+      props.isOpenMenu ? "translateX(0)" : "translateX(-100%)",
+    "@media (min-width: 768px)": {
+      display: "flex",
+      transform: "translateX(0)",
+    },
   },
 });
 
-function SideBar() {
-  const classes = useStyles();
+function SideBar({ isOpenMenu, onClose }: SideBarProps) {
+  const classes = useStyles({ isOpenMenu, onClose });
+
   return (
     <div className={classes.SideBar}>
       <div>
+        {isOpenMenu && <CloseIcon onClick={onClose} />}
         {options.map((option, index) => (
           <SideBarOption
+            key={index}
             title={option.title}
             Icon={option.Icon}
             selected={option.selected}

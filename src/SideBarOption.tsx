@@ -18,6 +18,13 @@ const useStyles = createUseStyles({
     cursor: "pointer",
     borderRadius: "6px",
     padding: "0px 37px 0px 24px",
+    borderLeft: "4px solid #fff",
+    transition: "500ms",
+    "&:hover": {
+      backgroundColor: "#F5F8FE",
+      borderLeft: "4px solid #2752E7",
+      color: "#2752E7",
+    },
   },
   active: {
     backgroundColor: "#F5F8FE",
