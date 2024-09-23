@@ -5,10 +5,12 @@ import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneR
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Avatar, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import SideBar from "./SideBar";
+import MenuIcon from "@mui/icons-material/Menu";
 
-// Define styles using react-jss
+interface HeaderProps {
+  onOpenSideBar: () => void;
+}
+
 const useStyles = createUseStyles({
   myHeader: {
     backgroundColor: "white",
@@ -17,7 +19,6 @@ const useStyles = createUseStyles({
     height: "86px",
     display: "flex",
     alignItems: "center",
-    position: "relative", // Adjusted for sidebar placement
   },
   rightHeader: {
     display: "flex",
@@ -26,15 +27,27 @@ const useStyles = createUseStyles({
   },
   leftHeader: {
     flex: "0.2",
+    cursor: "pointer",
     "@media (max-width: 768px)": {
       display: "none",
+    },
+    "@media (min-width: 768px) and (max-width: 1200px)": {
+      flex: "0.5",
+    },
+  },
+  menuIcon: {
+    display: "none",
+    "@media (max-width: 768px)": {
+      display: "block",
+      cursor: "pointer",
+      padding: "0 12px",
     },
   },
   textHeader: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    padding: "20px 0",
+    padding: "20px 0 20px 0",
     "& p": {
       margin: "0",
       fontSize: "12px",
@@ -64,9 +77,9 @@ const useStyles = createUseStyles({
     borderRadius: "6px",
     "& input": {
       border: "none",
-      padding: "8px",
-      borderRadius: "6px",
-      outline: "none",
+      "&:focus": {
+        outline: "none",
+      },
     },
     "@media (max-width: 768px)": {
       marginRight: "12px",
@@ -82,49 +95,36 @@ const useStyles = createUseStyles({
       display: "none",
     },
   },
-  Menu: {
-    display: "none",
-    "@media (max-width: 768px)": {
-      display: "block",
-    },
-  },
 });
 
-function Header() {
+const Header: React.FC<HeaderProps> = ({ onOpenSideBar }) => {
   const classes = useStyles();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 768);
 
-  // Toggle search input visibility
-  const handleSearchToggle = () => {
-    setIsSearchOpen((prevState) => !prevState);
-  };
-
-  // Toggle sidebar visibility
-  const handleSidebarToggle = () => {
-    setIsSidebarOpen((prevState) => !prevState);
+  const handleOpen = () => {
+    setIsOpen((prevState) => !prevState);
   };
 
   return (
     <div className={classes.myHeader}>
-      <SideBar isOpenMenu={isSidebarOpen} onClose={handleSidebarToggle} />
       <div className={classes.leftHeader}>
         <img src={logo} alt="Logo" />
       </div>
-      <div className={classes.Menu} onClick={handleSidebarToggle}>
-        <MenuOutlinedIcon />
-      </div>
+      <IconButton className={classes.menuIcon} onClick={onOpenSideBar}>
+        <MenuIcon />
+      </IconButton>
+
       <div className={classes.rightHeader}>
         <div className={classes.textHeader}>
           <h4>Welcome Zarror!</h4>
           <p>Hope you are healthy and happy today...</p>
         </div>
         <div className={classes.userHeader}>
-          <div className={classes.searchHeader} onClick={handleSearchToggle}>
-            <IconButton>
+          <div className={classes.searchHeader}>
+            <IconButton onClick={handleOpen}>
               <SearchIcon />
             </IconButton>
-            {isSearchOpen && <input placeholder="Search..." type="text" />}
+            {isOpen && <input placeholder="Search..." type="text" />}
           </div>
           <NotificationsNoneRoundedIcon
             className={classes.notificationIcon}
@@ -138,6 +138,6 @@ function Header() {
       </div>
     </div>
   );
-}
+};
 
 export default Header;

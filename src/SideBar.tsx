@@ -7,14 +7,12 @@ import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import SideBarOption from "./SideBarOption";
 import { createUseStyles } from "react-jss";
 
-// Define the interface for your component props
 interface SideBarProps {
   isOpenMenu: boolean;
-  onClose: () => void; // Prop to handle close
+  onClose: () => void;
 }
 
 const options = [
@@ -34,33 +32,24 @@ const options = [
 
 const useStyles = createUseStyles({
   SideBar: {
-    display: "flex",
     background: "#fff",
-    flex: "0.3",
     maxWidth: "252px",
-    justifyContent: "center",
-    padding: "24px 0",
-    position: "fixed",
-    top: "0",
-    left: "0",
-    height: "100%",
-    transition: "transform 0.3s ease",
-    transform: (props: SideBarProps) =>
-      props.isOpenMenu ? "translateX(0)" : "translateX(-100%)",
-    "@media (min-width: 768px)": {
-      display: "flex",
-      transform: "translateX(0)",
+    padding: "24px",
+    height: "100vh",
+    "@media (max-width: 768px)": {
+      position: "absolute",
     },
   },
 });
-
-function SideBar({ isOpenMenu, onClose }: SideBarProps) {
-  const classes = useStyles({ isOpenMenu, onClose });
+const SideBar: React.FC<SideBarProps> = ({ isOpenMenu }) => {
+  const classes = useStyles();
 
   return (
-    <div className={classes.SideBar}>
+    <div
+      className={classes.SideBar}
+      style={{ display: isOpenMenu ? "block" : "none" }}
+    >
       <div>
-        {isOpenMenu && <CloseIcon onClick={onClose} />}
         {options.map((option, index) => (
           <SideBarOption
             key={index}
@@ -72,6 +61,6 @@ function SideBar({ isOpenMenu, onClose }: SideBarProps) {
       </div>
     </div>
   );
-}
+};
 
 export default SideBar;
