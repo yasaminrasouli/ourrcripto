@@ -35,6 +35,7 @@ const useStyles = createUseStyles({
     background: "#fff",
     maxWidth: "252px",
     padding: "24px",
+    width: "100%",
     height: "100vh",
     "@media (max-width: 768px)": {
       position: "absolute",
